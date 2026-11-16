@@ -55,7 +55,11 @@ Makefile*
 /*/testfiles/workingdir/*
 
 # experimental
-scripts/
+scripts/*
+!scripts/prepare-xuncloud-core.py
+
+# Local integration staging/builds
+/tmp/
 
 # clang-format
 /syncthing/.clang-format

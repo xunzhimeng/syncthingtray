@@ -57,6 +57,7 @@
 #include <QPalette>
 #include <QStringBuilder>
 #include <QTextBrowser>
+#include <QUrlQuery>
 
 #if defined(GUI_QTQUICK) && defined(SYNCTHINGWIDGETS_GUI_QTQUICK_MODE_DESKTOP)
 #include <QQuickWidget>
@@ -193,6 +194,26 @@ TrayWidget::TrayWidget(TrayMenu *parent)
     showLogButton->setIcon(QIcon(QStringLiteral("file-text.fa")));
     showLogButton->setFlat(true);
     cornerFrameLayout->addWidget(showLogButton);
+    // The cloud login belongs to the local sync core, not a remote tray profile.
+    auto *cloudButton = new QPushButton(m_cornerFrame);
+    cloudButton->setToolTip(tr("Connect cloud account"));
+    cloudButton->setIcon(QIcon(QStringLiteral("cloud.fa")));
+    cloudButton->setFlat(true);
+    cornerFrameLayout->addWidget(cloudButton);
+    connect(cloudButton, &QPushButton::clicked, this, [this] {
+        QUrl url(m_data.connection()->syncthingUrl());
+        if ((url.scheme() != QStringLiteral("http") && url.scheme() != QStringLiteral("https"))
+            || (url.host() != QStringLiteral("localhost") && url.host() != QStringLiteral("127.0.0.1") && url.host() != QStringLiteral("::1"))) {
+            QMessageBox::information(this, tr("Connect cloud account"), tr("Select a loopback connection to your local Syncthing instance first."));
+            return;
+        }
+        url.setUserInfo(QString());
+        url.setFragment(QString());
+        QUrlQuery query;
+        query.addQueryItem(QStringLiteral("cloud"), QStringLiteral("join"));
+        url.setQuery(query);
+        QDesktopServices::openUrl(url);
+    });
     auto *scanAllButton = new QPushButton(m_cornerFrame);
     scanAllButton->setToolTip(tr("Rescan all folders"));
     scanAllButton->setIcon(QIcon(QStringLiteral("refresh.fa")));

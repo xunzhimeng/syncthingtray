@@ -32,6 +32,10 @@ Syncthing Tray works with Syncthing v2. It also very likely still works with Syn
 is not regularly tested anymore. Syncthing Tray is maintained, and updates will be made to support future Syncthing
 versions as needed.
 
+## XunCloud account sync
+
+This branch adds a local cloud-account entry. See [account-aware core integration](docs/xuncloud.md) for the required standalone or built-in core build; upstream binaries do not include account enrollment.
+
 ## Supported platforms
 Official binaries are provided for Windows (for i686, x86_64 and aarch64), GNU/Linux (for x86_64) and Android
 (for x86_64 and aarch64). They can be downloaded from the [website](https://martchus.github.io/syncthingtray/#downloads-section)

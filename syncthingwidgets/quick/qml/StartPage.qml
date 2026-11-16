@@ -263,6 +263,13 @@ Page {
                 iconName: "share-alt"
             }
             CustomDelegate {
+                readonly property string cloudCoreUrl: SyncthingData.connection.syncthingUrl.toString().split(/[?#]/)[0]
+                visible: !App.usingUnixDomainSocket && /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::[0-9]+)?\/?$/.test(cloudCoreUrl)
+                onClicked: SyncthingModels.openUrlExternally(cloudCoreUrl + "?cloud=join")
+                labelText: qsTr("Connect cloud account")
+                iconName: "cloud"
+            }
+            CustomDelegate {
                 onClicked: SyncthingModels.openUrlExternally(SyncthingData.connection.syncthingUrlWithCredentials)
                 visible: !App.usingUnixDomainSocket
                 labelText: qsTr("Open Syncthing in web browser")
